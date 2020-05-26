@@ -1,8 +1,13 @@
+# StravaAnalysis specific files
+client_secret.json
+.idea
+General Data/
+Streams Data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-client_secret.json
 
 # C extensions
 *.so
