@@ -3,6 +3,7 @@ client_secret.json
 .idea
 General Data/
 Streams Data/
+test_environment.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
