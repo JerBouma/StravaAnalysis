@@ -1,4 +1,7 @@
 ## StravaAnalysis
+With limitations to Strava's free version, it becomes increasingly difficult to properly analyse your data. Next to
+that being able to fully "own" your data can be very valuable. This package makes that possible.
+
 The goal with this package to obtain all sports data to do your own personal analysis. Therefore, you do not have to
 rely on 3rd party software or Strava, to calculate the necessary metrics. As you can have different goals than
 Strava can give you, the collection of data via their API can prove to be of help to translate your goals to numbers
@@ -7,8 +10,13 @@ and see actual progression over time between activities (that might not even be 
 ![](Examples/StravaAnalysis.png)
 
 ## Initial Setup
-To get started you need a Strava API. The steps below you only have to do <u>once</u>. Afterwards, the API is linked
-to your account and you can start using this package.
+To get started you need to install the package and obtain a Strava API. The steps below you only have to
+do <u>once</u>. Afterwards, the API is linked to your account and you can start using this package.
+
+### Install the package
+1. `pip install StravaAnalysis`
+    - Alternatively, download this repository
+2. (within Python) `import StravaAnalysis as se`
 
 ### Create your own Strava API
 1. Go to https://www.strava.com/settings/api and create an API.
@@ -29,11 +37,11 @@ more info, have a look [here](https://chromedriver.chromium.org/getting-started)
 Chrome Driver file by adding the path to the parameter `chrome_driver_path`.
 
 **Note:** the package *does not* store your log-in credentials in any way. It merely uses these credentials to 
-be able to collect data from Strava. The source code is available in this repository if you have any doubts.
+be able to collect data from Strava. The source code is available in the repository if you have any doubts.
 
-**Collect all of your data and export it to .json files**
+**Collect all of your data and export it to json files**
 ```
-import StravaExporter as se
+import StravaAnalysis as se
 
 USERNAME = <your Strava e-mail here>
 PASSWORD = <your Strava password here>
@@ -48,7 +56,7 @@ se.data_exporter(general_data, streams_data)
 ```
 **Collect general data and collect from a specific activity**
 ```
-import StravaExporter as se
+import StravaAnalysis as se
 
 USERNAME = <your Strava e-mail here>
 PASSWORD = <your Strava password here>
@@ -71,9 +79,13 @@ se.export_streams_data(streams_data)
 ```
 **Import general data and import a specific activity**
 ```
-import StravaExporter as se
+import StravaAnalysis as se
 
 # Import General Data & Streams Data
 se.import_general_data()
 se.import_streams_data("554237255.json")
 ```
+
+## Support
+**No package is perfect.** Therefore, in case you wish to contribute I highly appreciate pull requests and/or creation
+of issues. 
