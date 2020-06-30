@@ -6,9 +6,9 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="StravaAnalysis",
     packages=["StravaAnalysis"],
-    version="0.1.0",
+    version="0.1.4",
     license="MIT",
-    description="Fully automates the collection of Strava data via their API and neatly structures this inside json"
+    description="Fully automates the collection of Strava data via their API and neatly structures this inside json "
                 "files per activity.",
     author="JerBouma",
     author_email="jer.bouma@gmail.com",
