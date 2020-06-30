@@ -2,9 +2,10 @@ import time
 from data_collection import (initialize_client, collect_general_data, collect_streams_data)
 from data_export import (export_general_data, export_streams_data)
 from tqdm import tqdm
+import os
 
 
-def data_aggregator(username, password, client_id, client_secret, chrome_driver_path=None):
+def data_aggregator(username, password, client_id, client_secret, chrome_driver_path=None, overwrite=False):
     """
     Description
     ----
@@ -28,10 +29,12 @@ def data_aggregator(username, password, client_id, client_secret, chrome_driver_
         Your API ID which you can obtain by creating a Strava API.
     client_secret (string)
         Your API Secret which you can obtain by creating a Strava API.
+    overwrite (boolean)
+        Whether you wish to overwrite already created json files. Default is False.
 
     Output
     ----
-    general_data (dataframe)
+    general_data (DataFrame)
         A collection of all the general data for each activity.
     streams_data (dictionary)
         A collection of all the streams data for each activity.
@@ -48,9 +51,14 @@ def data_aggregator(username, password, client_id, client_secret, chrome_driver_
     for activity_id in tqdm(general_data['map']):
         id = activity_id['id'][1:]
 
+        if not overwrite:
+            if str(id + '.json') in os.listdir("Streams Data"):
+                continue
         try:
             streams_data[id] = collect_streams_data(client, id)
-        except Exception as e:
+        except AttributeError:
+            continue
+        except RuntimeError:
             print("Maximum callbacks reached (600).. waiting 15 minutes.")
             for seconds in tqdm(range(901), position=0, leave=True):
                 time.sleep(1)
@@ -73,7 +81,7 @@ def data_exporter(general_data, streams_data):
 
     Input
     ----
-    general_data (dataframe)
+    general_data (DataFrame)
         Data obtained from the collect_general_data() function.
     streams_data (dictionary)
         Data obtained from either data_aggregator() or collect_streams_data() depending
@@ -85,7 +93,7 @@ def data_exporter(general_data, streams_data):
     """
     export_general_data(general_data)
 
-    if "heartrate" in stream_data.keys():
+    if "time" in streams_data.keys():
         export_streams_data(streams_data, json_name="streams_data.json")
     else:
         for id in tqdm(streams_data.keys()):

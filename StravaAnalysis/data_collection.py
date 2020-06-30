@@ -4,6 +4,7 @@ import pyderman
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
+import numpy as np
 import os
 
 
@@ -82,27 +83,35 @@ def initialize_client(username, password, client_id, client_secret, chrome_drive
     return client
 
 
-def collect_general_data(client, mile=1.609344):
+def collect_general_data(client, mile=1.609344, include_activities_list=False):
     """
     Description
     ----
-    Collects all data from your Strava account and returns it in the variable "General Data"
-    which contains all general statistics including average heartrate pace, distance and more.
-
+    Collects all data from your Strava account and returns it in the variable "general_data"
+    which contains all general statistics including average heart rate, pace, distance and more.
     This function also calculates pace, distance and speed in both km and miles.
+
+    It also has the option to display an activities list by setting include_activities_list to True.
 
     Input
     ----
     client (object)
         The client object obtained from the initialize_client() function.
     mile (float)
-        Used to calculate the pace, distance and speed in miles. Is set on an
-        exact value by default.
+        Used to calculate the pace, distance and speed in miles.
+        Default is set on an exact value by default.
+    include_activities_list (boolean)
+        A boolean that creates an activities list when set on True.
+        Default is set on False.
 
     Output
     ----
-    general_data (dataframe)
-        A collection of all the general data for each activity.
+    general_data (DataFrame)
+        A collection of the general data for each activity.
+
+    activities_list (Dictionary)
+        A collection of activities with as keys the Time + Name and as value
+        the activity id. Is only returned when include_activities_list is True.
     """
     data = []
     for activity in client.get_activities():
@@ -124,43 +133,48 @@ def collect_general_data(client, mile=1.609344):
         except ZeroDivisionError:
             average_speed.append(0)
 
-    for max in df['max_speed']:
+    for maximum in df['max_speed']:
         try:
-            max_speed.append(int(1000 / (max * 60)) * 100 +
-                             int(1000 / (max * 60) % 1 * 60))
+            max_speed.append(int(1000 / (maximum * 60)) * 100 +
+                             int(1000 / (maximum * 60) % 1 * 60))
         except ZeroDivisionError:
             max_speed.append(0)
 
-    # Calculate Pace
-    df['average_pace_km'] = average_speed
-    df['max_pace_km'] = max_speed
-    df['average_pace_mile'] = df['average_pace_km'] / mile
-    df['max_pace_mile'] = df['max_pace_km'] / mile
-
-    # Distance
     df['distance_km'] = df['distance'] / 1000
     df['distance_mile'] = df['distance_km'] / mile
     df = df.drop('distance', axis=1)
 
-    # Calculate Speed
     df['average_speed_km'] = df['average_speed'] * 3.6
     df['max_speed_km'] = df['max_speed'] * 3.6
     df['average_speed_mile'] = df['average_speed_km'] / mile
     df['max_speed_mile'] = df['max_speed_km'] / mile
 
-    # Clean up NaNs
+    df['average_pace_km'] = average_speed
+    df['max_pace_km'] = max_speed
+    df['average_pace_mile'] = (df['average_pace_km'] * mile).astype(int)
+    df['max_pace_mile'] = (df['max_pace_km'] * mile).astype(int)
+
     general_data = df.fillna(0)
+
+    if include_activities_list:
+        activities_list = {}
+
+        for index, row in general_data.iterrows():
+            activities_list[index + " - " + row['name']] = row['map']['id'][1:]
+
+        return general_data, activities_list
 
     return general_data
 
 
-def collect_streams_data(client, activity_id,  types="All"):
+# noinspection PyTypeChecker
+def collect_streams_data(client, activity_id, types="All", mile=1.609344):
     """
     Description
     ----
-    Collects all streams data from your Strava activity and returns it in the variable "Streams Data"
+    Collects all streams data from your Strava activity and returns it in the variable "streams_data"
     which contains specific statistics per activity including distance, heart rate, velocity,
-    altitude and more.
+    altitude and more. Furthermore, it also calculates distance, pace and speed (in km and miles).
 
     Input
     ----
@@ -170,9 +184,12 @@ def collect_streams_data(client, activity_id,  types="All"):
         The activity_id which can be obtained by clicking on any of your activities and
         copying the digits after "activities/".
     types (string)
-        Gives the option to select a subset of the data, for example only heartrate data.
+        Gives the option to select a subset of the data, for example only heart rate data.
         By default this option is set to "All" which means it includes all the available
-        type.
+        types. These are 'time', 'latlng', 'distance', 'altitude', 'velocity_smooth',
+        heartrate', 'cadence', 'watts', 'temp', 'moving', 'grade_smooth'.
+    mile (float)
+        An accurate measurement of the definition of 1 mile in kilometers.
 
     Output
     ----
@@ -188,5 +205,27 @@ def collect_streams_data(client, activity_id,  types="All"):
     streams_data = {}
     for key in raw_data.keys():
         streams_data[key] = raw_data[key].data
+
+    time_in_minutes = pd.Series(streams_data['time']) / 60
+
+    try:
+        streams_data['distance_km'] = pd.Series(streams_data['distance']) / 1000
+        streams_data['distance_mile'] = streams_data['distance_km'] / mile
+
+        streams_data['speed_km'] = (streams_data['distance_km'] / (time_in_minutes / 60)).dropna()
+        streams_data['speed_mile'] = streams_data['speed_km'] / mile
+
+        pace_int = time_in_minutes / pd.Series(streams_data['distance_km'])
+        pace_int = pace_int.replace([np.inf, -np.inf], np.nan).fillna(method='backfill')
+        pace_remaining = (time_in_minutes / pd.Series(streams_data['distance_km']) - pace_int.astype(int)) * 60
+        pace_remaining = pace_remaining.replace([np.inf, -np.inf], np.nan).fillna(method='backfill')
+
+        streams_data['pace_km'] = pace_int.astype(int) * 100 + pace_remaining.astype(int)
+        streams_data['pace_mile'] = (streams_data['pace_km'] * mile).astype(int)
+    except (KeyError, RuntimeWarning):
+        None
+
+    for key in streams_data.keys():
+        streams_data[key] = list(streams_data[key])
 
     return streams_data
