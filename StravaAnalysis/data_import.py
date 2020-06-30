@@ -58,6 +58,3 @@ def import_streams_data(file="streams_data.json", location="Streams Data\\", con
             return pd.DataFrame(json_data)
         else:
             return json_data
-
-
-# data = import_streams_data("554237255.json", convert_to_df=False)

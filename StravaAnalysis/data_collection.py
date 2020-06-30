@@ -167,7 +167,6 @@ def collect_general_data(client, mile=1.609344, include_activities_list=False):
     return general_data
 
 
-# noinspection PyTypeChecker
 def collect_streams_data(client, activity_id, types="All", mile=1.609344):
     """
     Description
