@@ -1,7 +1,7 @@
 import time
-from data_collection import (initialize_client, collect_general_data, collect_streams_data)
-from data_export import (export_general_data, export_streams_data)
 from tqdm import tqdm
+from .data_collection import (initialize_client, collect_general_data, collect_streams_data)
+from .data_export import (export_general_data, export_streams_data)
 import os
 
 
@@ -52,8 +52,11 @@ def data_aggregator(username, password, client_id, client_secret, chrome_driver_
         id = activity_id['id'][1:]
 
         if not overwrite:
-            if str(id + '.json') in os.listdir("Streams Data"):
-                continue
+            try:
+                if str(id + '.json') in os.listdir("Streams Data"):
+                    continue
+            except FileNotFoundError:
+                os.mkdir("Streams Data")
         try:
             streams_data[id] = collect_streams_data(client, id)
         except AttributeError:
