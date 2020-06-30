@@ -212,7 +212,7 @@ def collect_streams_data(client, activity_id, types="All", mile=1.609344):
         streams_data['distance_km'] = pd.Series(streams_data['distance']) / 1000
         streams_data['distance_mile'] = streams_data['distance_km'] / mile
 
-        streams_data['speed_km'] = (streams_data['distance_km'] / (time_in_minutes / 60)).dropna()
+        streams_data['speed_km'] = (streams_data['distance_km'] / (time_in_minutes / 60)).fillna(method='backfill')
         streams_data['speed_mile'] = streams_data['speed_km'] / mile
 
         pace_int = time_in_minutes / pd.Series(streams_data['distance_km'])
