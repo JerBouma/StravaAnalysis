@@ -1,3 +1,11 @@
+## StravaAnalysis
+The goal with this package to obtain all sports data to do your own personal analysis. Therefore, you do not have to
+rely on 3rd party software or Strava, to calculate the necessary metrics. As you can have different goals than
+Strava can give you, the collection of data via their API can prove to be of help to translate your goals to numbers
+and see actual progression over time between activities (that might not even be linked to each other via Strava).
+
+![](Examples/StravaAnalysis.png)
+
 ## Initial Setup
 To get started you need a Strava API. The steps below you only have to do <u>once</u>. Afterwards, the API is linked
 to your account and you can start using this package.
@@ -15,8 +23,8 @@ Note that the client secret should be kept to yourself. Do not share this code. 
 please see [the official documentation by Strava](https://developers.strava.com/docs/getting-started/).
 
 ## Example
-When running the the `initilize_client` (or `data_aggregator`) function for the first time, it will ask if you wish to download
-the latest Chrome Driver. This is required to obtain the authentication key used to collect your data. For
+When running the `initilize_client` (or `data_aggregator`) function for the first time, it will ask if you wish to
+download the latest Chrome Driver. This is required to obtain the authentication key used to collect your data. For
 more info, have a look [here](https://chromedriver.chromium.org/getting-started). You can also provide your own
 Chrome Driver file by adding the path to the parameter `chrome_driver_path`.
 
@@ -38,7 +46,7 @@ general_data, streams_data = se.data_aggregator(USERNAME, PASSWORD, CLIENT_ID, C
 # Export all Data to JSON Files
 se.data_exporter(general_data, streams_data)
 ```
-**Collect general data and/or collect from a specific activity**
+**Collect general data and collect from a specific activity**
 ```
 import StravaExporter as se
 
@@ -57,7 +65,15 @@ general_data = se.collect_general_data(client)
 # Activity id is found by clicking on any activity in Strava and copying the code in the url
 streams_data = se.collect_streams_data(client, "1234567890")
 
-# Optional Export (uncomment to run)
-# se.export_general_data(general_data)
-# se.export_streams_data(streams_data)
+# Export Data
+se.export_general_data(general_data)
+se.export_streams_data(streams_data)
+```
+**Import general data and import a specific activity**
+```
+import StravaExporter as se
+
+# Import General Data & Streams Data
+se.import_general_data()
+se.import_streams_data("554237255.json")
 ```
