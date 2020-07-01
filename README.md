@@ -10,6 +10,28 @@ and see actual progression over time between activities (that might not even be 
 
 ![](Examples/StravaAnalysis.png)
 
+## Initial Setup
+To get started you need to install the package via PyPi and obtain a Strava API (free). The steps below you only have
+to do once. Afterwards, the API is linked to your account and you can start using this package.
+
+### Install the package
+1. `pip install StravaAnalysis`
+    - Alternatively, download this repository
+2. (within Python) `import StravaAnalysis as se`
+
+### Create your own Strava API
+1. Go to https://www.strava.com/settings/api and create an API.
+    - Enter application name, category and authorisation. The authorisation should be *localhost*
+    which makes it a local app for just you. 
+2. Press Submit
+3. Copy and save the following:
+    - Client ID
+    - Client Secret
+    
+Note that the client secret should be kept to yourself. Do not share this code with anyone otherwise you risk others
+abusing your API requests limit. For detailed info on the application please see
+[the official documentation by Strava](https://developers.strava.com/docs/getting-started/).
+
 ## Data Collected
 General Data refers to all data obtained for each activity. This package returns a DataFrame that gives all these
 metrics per activity.
@@ -112,29 +134,6 @@ on the Activity overview on Strava.
 | speed_mile | The speed in miles over time. |
 | time | The actual time in seconds. |
 | velocity_smooth | Smoothing for velocity over time. |
-
-
-## Initial Setup
-To get started you need to install the package via PyPi and obtain a Strava API (free). The steps below you only have
-to do once. Afterwards, the API is linked to your account and you can start using this package.
-
-### Install the package
-1. `pip install StravaAnalysis`
-    - Alternatively, download this repository
-2. (within Python) `import StravaAnalysis as se`
-
-### Create your own Strava API
-1. Go to https://www.strava.com/settings/api and create an API.
-    - Enter application name, category and authorisation. The authorisation should be *localhost*
-    which makes it a local app for just you. 
-2. Press Submit
-3. Copy and save the following:
-    - Client ID
-    - Client Secret
-    
-Note that the client secret should be kept to yourself. Do not share this code with anyone otherwise you risk others
-abusing your API requests limit. For detailed info on the application please see
-[the official documentation by Strava](https://developers.strava.com/docs/getting-started/).
 
 ## Example
 When running the `initilize_client` (or `data_aggregator`) function for the first time, it will ask if you wish to
