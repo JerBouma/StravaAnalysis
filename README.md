@@ -10,6 +10,110 @@ and see actual progression over time between activities (that might not even be 
 
 ![](Examples/StravaAnalysis.png)
 
+## Data Collected
+General Data refers to all data obtained for each activity. This package returns a DataFrame that gives all these
+metrics per activity.
+
+| General Data Variables | Description |
+| -----------------------| ----------- |
+| achievement_count | The amount of achievements obtained during the specific workout. |
+| athlete | General information about the Athlete if available. |
+| athlete_count | The amount of athletes who contributed to the workout. |
+| average_cadence | Average cadence of the workout. |
+| average_heartrate | Average heartrate of the workout. |
+| average_pace_km | Average pace (km) listed as "542" meaning 5:42 per km. | 
+| average_pace_mile | Average pace (mile) listed as "730" meaning 7:30 per mile. |  
+| average_speed_km | Average speed (km) of the workout in km/h. |
+| average_speed_mile | Average speed (km) of the workout in miles/h. |
+| average_temp | Average tempo of the workout if available. |
+| average_watts | Average watts of the workout if available. |
+| best_efforts | Best efforts recorded during the workout. |
+| calories | Amount of calories burned if applicable. |
+| comment_count | Amount of comments on the Strava activity. |
+| commute | Whether the activity is listed as a commute. |
+| description | Whether the activity includes a description. |
+| device_name | Whether the activity includes a device name. |
+| device_watts | Whether the device returns watts. |
+| distance_km | The distance in kilometers. |
+| distance_mile | The distance in miles. |
+| elapsed_time | The total time of the run. |
+| elev_high | The highest elevation. |
+| elev_low | The lowest elevation. | 
+| embed_token | Whether there is an embed token given out. |
+| end_latlng | Last latitude and longitude.  |
+| external_id | The id, usually contains the name of the device you uploaded on. |
+| flagged | Whether your activity is flagged for specific reasons. |
+| from_accepted_tag | Whether you accepted to be included in a specific activity. |
+| gear | Whether you used specific gear. |
+| gear_id | The id of the gear. |
+| has_heartrate | Tracks whether you monitor heart rate during the activity. |
+| has_kudoed | Tracks if you obtained kudos. |
+| highlighted_kudosers | Tracks if you highlighted kudo'ers. |
+| instagram_primary_photo | In case put on Instagram, which photo was selected. |
+| kilojoules | The kilojoules burned if applicable. |
+| kudos_count | The amount of kudos received. |
+| laps | The amount of laps you have done. |
+| location_city | The location of the city your are in during the workout. |
+| location_country |The country you are in during the workout. |
+| location_state | The state you are in during the workout. |
+| manual | Whether the activity is manually submitted. |
+| map | The map which you can recreate with this data. |
+| max_heartrate | If your max heartrate is reached. |
+| max_pace_km | Max pace in kilometer where "430" means 4:30. |
+| max_pace_mile | Max pace in miles where "530" means 5:30. |
+| max_speed_km | Max speed in kilometer. |
+| max_speed_mile | Max speed in miles. |
+| max_watts | Max watts is applicable. |
+| moving_time | The time you moved which differs from elapsed time. |
+| name | The name of the activity. |
+| partner_brand_tag | Whether you have a Brand attached to your activity. |
+| partner_logo_url | Brand logo. |
+| photo_count | Amount of photos added. |
+| photos | Whether you added photos or not. |
+| pr_count | The amount of Personal Records. |
+| private | Whether the activity is private or not. |
+| segment_efforts | Whether you have new segment efforts. |
+| segment_leaderboard_opt_out | Whether you opted out of the segment leaderboards. |
+| splits_metric | Metric Splits if applicable.
+| splits_standard |Standard splits if applicable.
+| start_date | The exact starting date.
+| start_latitude | The start latitude.
+| start_latlng | The start latitude and longitude. | 
+| start_longitude | The start longitude. |
+| suffer_score | The suffer score if applicable. | 
+| timezone | The timezone you are in. |
+| total_elevation_gain | The total elevation gained. |
+| total_photo_count | The total amount of photos. | 
+| trainer | Whether you used a training program. |
+| type | The activity type (i.e. Run, Ride, Swim). |
+| upload_id | The id included when uploaded. |
+| utc_offset | UTC Offset to calculate time. |
+| weighted_average_watts | Weighted value of the average watts. |
+| workout_type | Listed as a number. For example Ride = 10. |
+
+Streams data refers to data obtained per timestamp for an activity. Thus it contains a long lists depicting for
+example your pace at a specific time window. With this data you can, among other things, recreate the graph displayed
+on the Activity overview on Strava.
+
+| Streams Data Variables | Description |
+| -----------------------| ----------- |
+| altitude | The altitude over time. |
+| cadence | The cadence over time. |
+| distance | The distance in meters over time. |
+| distance_km | The distance in kilometers over time. |
+| distance_mile | The distance in miles over time. |
+| grade_smooth | The grade smooth applied over time. | 
+| heartrate | The heart rate over time. |
+| latlng | The latitude and altitude over time. |
+| moving | Whether you are moving or not. |
+| pace_km | The pace in km over time where "540" refers to 5:40. |
+| pace_mile | The pace in miles over time where "740" refers to 7:40. |
+| speed_km | The speed in kilometers over time. |
+| speed_mile | The speed in miles over time. |
+| time | The actual time in seconds. |
+| velocity_smooth | Smoothing for velocity over time. |
+
+
 ## Initial Setup
 To get started you need to install the package via PyPi and obtain a Strava API (free). The steps below you only have
 to do once. Afterwards, the API is linked to your account and you can start using this package.
